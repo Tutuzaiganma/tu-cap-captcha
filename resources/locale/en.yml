@@ -1,0 +1,44 @@
+tu-cap-captcha:
+  admin:
+    extension_name: Cap Captcha
+    extension_description: Captcha extension for blocking high-frequency or bot-like actions such as registration, login, posting, and replying.
+    cards:
+      global: Global Configuration
+    buttons:
+      restore_defaults: Restore defaults
+    validation:
+      enable_requires_config: "Cannot enable {operation} captcha: please fill global fixed/floating script URLs and global Cap endpoint/secret first, or enable independent config for this operation and provide its endpoint/secret."
+      enable_requires_config_hint: Complete global script and verifier settings first, or enable and fill independent endpoint/secret for this operation.
+    fields:
+      widget_script_url: Fixed widget script URL
+      floating_script_url: Floating widget script URL
+      wasm_url: WASM URL
+      endpoint: Cap endpoint
+      secret: Cap secret
+      global_widget_script_url_help: Used as the fixed widget script URL, defaults to jsDelivr.
+      global_floating_script_url_help: Used as the floating widget script URL, defaults to jsDelivr.
+      global_wasm_url_help: Leave empty to skip injecting CAP_CUSTOM_WASM_URL.
+      global_endpoint_help: Used as the default endpoint for all operations.
+      global_secret_help: Used as the default secret for all operations.
+      per_operation_endpoint_help: Leave empty to use the global Cap endpoint.
+      per_operation_secret_help: Leave empty to use the global Cap secret.
+      enable_switch: "Enable captcha for {operation}"
+      enable_help: Require Cap verification before this operation can proceed.
+      custom_config_switch: Use independent Cap configuration
+      custom_config_help: Turn on to set dedicated endpoint and secret for this operation.
+    switch:
+      enabled: Verification enabled
+      disabled: Verification disabled
+      custom_enabled: Independent config enabled
+      custom_disabled: Independent config disabled
+    operations:
+      register: Register
+      login: Login
+      forgot: Password Recovery
+      discussion: New Discussion
+      reply: Reply
+      search: Search
+  forum:
+    captcha_required: Please complete captcha verification first.
+  api:
+    invalid_captcha: Captcha verification failed, please try again.

@@ -1,0 +1,44 @@
+tu-cap-captcha:
+  admin:
+    extension_name: Cap 验证码
+    extension_description: 用于拦截注册、登录、发帖、回复等高频或疑似机器人操作的验证码插件。
+    cards:
+      global: 全局配置
+    buttons:
+      restore_defaults: 恢复默认
+    validation:
+      enable_requires_config: "无法启用{operation}验证码：请先填写全局固定式脚本URL、浮动式脚本URL，以及全局 Cap 端点与 Cap 秘钥；或开启当前类别单独配置并填写该类别的 Cap 端点与 Cap 秘钥。"
+      enable_requires_config_hint: 请先完善全局脚本与验证配置，或为当前类别启用并填写单独端点和秘钥。
+    fields:
+      widget_script_url: 固定式脚本URL
+      floating_script_url: 浮动式脚本URL
+      wasm_url: WASM URL
+      endpoint: Cap 端点
+      secret: Cap 秘钥
+      global_widget_script_url_help: 作为固定式验证码组件脚本地址，默认使用 jsDelivr。
+      global_floating_script_url_help: 作为浮动式验证码组件脚本地址，默认使用 jsDelivr。
+      global_wasm_url_help: 留空则不注入 CAP_CUSTOM_WASM_URL，全局变量按需设置。
+      global_endpoint_help: 作为所有操作的默认 Cap 端点。
+      global_secret_help: 作为所有操作的默认 Cap 秘钥。
+      per_operation_endpoint_help: 留空则使用全局 Cap 端点。
+      per_operation_secret_help: 留空则使用全局 Cap 秘钥。
+      enable_switch: "启用{operation}验证码"
+      enable_help: 开启后，该操作在执行前需要通过 Cap 验证。
+      custom_config_switch: 启用单独配置
+      custom_config_help: 开启后，可为该操作设置独立端点与秘钥。
+    switch:
+      enabled: 验证已开启
+      disabled: 验证已关闭
+      custom_enabled: 单独配置已开启
+      custom_disabled: 单独配置已关闭
+    operations:
+      register: 注册
+      login: 登录
+      forgot: 找回密码
+      discussion: 发帖
+      reply: 回复
+      search: 搜索
+  forum:
+    captcha_required: 请先完成验证码验证。
+  api:
+    invalid_captcha: 验证码校验失败，请重试。

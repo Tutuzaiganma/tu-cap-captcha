@@ -1,0 +1,87 @@
+.CapCaptcha-container {
+  display: flex;
+  justify-content: center;
+}
+
+.CapCaptcha-container--discussion,
+.CapCaptcha-container--reply {
+  justify-content: flex-start;
+  margin-bottom: 12px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform-origin: top left;
+}
+
+.CapCaptcha-container--discussion.is-entering,
+.CapCaptcha-container--reply.is-entering {
+  animation: capCaptchaPopup 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.CapCaptcha-container--discussion.is-fading-out,
+.CapCaptcha-container--reply.is-fading-out {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.98);
+  transition-delay: 1.5s;
+  pointer-events: none;
+}
+
+@keyframes capCaptchaPopup {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .CapCaptcha-container--discussion,
+  .CapCaptcha-container--reply {
+    transition: none;
+  }
+
+  .CapCaptcha-container--discussion.is-entering,
+  .CapCaptcha-container--reply.is-entering {
+    animation: none;
+  }
+}
+
+.CapCaptcha-container cap-widget {
+  --cap-background: var(--control-bg);
+  --cap-color: var(--text-color);
+  --cap-border-color: var(--secondary-color);
+  --cap-checkbox-background: var(--body-bg);
+  --cap-checkbox-border: 1px solid var(--secondary-color);
+  --cap-spinner-background-color: var(--muted-color-light);
+  --cap-spinner-color: var(--primary-color);
+}
+
+.CapCaptcha-container cap-widget::part(attribution) {
+  display: none !important;
+}
+
+// visibility:hidden 隐藏按钮但保留坐标，JS 对齐后 getBoundingClientRect() 仍有效。
+.CapCaptcha-search-trigger {
+  position: fixed;
+  visibility: hidden;
+  padding: 0;
+  border: 0;
+}
+
+#cap-search-floating-widget {
+  --cap-background: var(--control-bg);
+  --cap-color: var(--text-color);
+  --cap-border-color: var(--secondary-color);
+  --cap-checkbox-background: var(--body-bg);
+  --cap-checkbox-border: 1px solid var(--secondary-color);
+  --cap-spinner-background-color: var(--muted-color-light);
+  --cap-spinner-color: var(--primary-color);
+}
+
+#cap-search-floating-widget::part(attribution) {
+  display: none !important;
+}
