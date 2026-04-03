@@ -1,6 +1,7 @@
 import app from 'flarum/admin/app';
 import ExtensionPage from 'flarum/admin/components/ExtensionPage';
 import Switch from 'flarum/common/components/Switch';
+import extractText from 'flarum/common/utils/extractText';
 
 const extensionId = 'tu-cap-captcha';
 const defaultSettings = {
@@ -276,8 +277,8 @@ app.initializers.add('tu/cap-captcha', () => {
   const extension = app.data.extensions?.[extensionId];
 
   if (extension) {
-    extension.extra['flarum-extension'].title = app.translator.trans('tu-cap-captcha.admin.extension_name');
-    extension.description = app.translator.trans('tu-cap-captcha.admin.extension_description');
+    extension.extra['flarum-extension'].title = extractText(app.translator.trans('tu-cap-captcha.admin.extension_name'));
+    extension.description = extractText(app.translator.trans('tu-cap-captcha.admin.extension_description'));
   }
 
   app.extensionData.for(extensionId).registerPage(CapCaptchaSettingsPage);
