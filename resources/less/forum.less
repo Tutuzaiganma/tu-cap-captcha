@@ -5,12 +5,27 @@
 
 .CapCaptcha-container--discussion,
 .CapCaptcha-container--reply {
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  display: block;
+  height: 0;
+  overflow: visible;
   justify-content: flex-start;
-  margin-bottom: 12px;
+  margin-bottom: 0;
+  max-width: 100%;
   opacity: 1;
   transform: translateY(0) scale(1);
   transition: opacity 0.25s ease, transform 0.25s ease;
   transform-origin: top left;
+}
+
+.CapCaptcha-container--discussion cap-widget,
+.CapCaptcha-container--reply cap-widget {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .CapCaptcha-container--discussion.is-entering,
@@ -61,6 +76,14 @@
 }
 
 .CapCaptcha-container cap-widget::part(attribution) {
+  display: none !important;
+}
+
+cap-widget::part(attribution) {
+  display: none !important;
+}
+
+a.credits[aria-label='Secured by Cap'][href='https://trycap.dev/'] {
   display: none !important;
 }
 

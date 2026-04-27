@@ -20,6 +20,53 @@ const CAP_WIDGET_I18N_ZH_HANS = {
 };
 
 let capWidgetScriptLoaded = false;
+let capAttributionSuppressionInitialized = false;
+const CAP_ATTRIBUTION_SELECTOR = '[part~="attribution"], a.credits[aria-label="Secured by Cap"][href="https://trycap.dev/"]';
+const observedShadowRoots = new WeakSet();
+
+function hideCapAttributionInRoot(root) {
+  if (!root || typeof root.querySelectorAll !== 'function') return;
+
+  root.querySelectorAll(CAP_ATTRIBUTION_SELECTOR).forEach((node) => {
+    node.style.setProperty('display', 'none', 'important');
+    node.setAttribute('aria-hidden', 'true');
+  });
+}
+
+function ensureShadowRootObserver(shadowRoot) {
+  if (!shadowRoot || observedShadowRoots.has(shadowRoot)) return;
+
+  observedShadowRoots.add(shadowRoot);
+  hideCapAttributionInRoot(shadowRoot);
+
+  const observer = new MutationObserver(() => {
+    hideCapAttributionInRoot(shadowRoot);
+  });
+
+  observer.observe(shadowRoot, { childList: true, subtree: true });
+}
+
+function hideCapAttributionEverywhere() {
+  if (typeof document === 'undefined') return;
+
+  hideCapAttributionInRoot(document);
+  document.querySelectorAll('cap-widget').forEach((widget) => {
+    if (widget.shadowRoot) ensureShadowRootObserver(widget.shadowRoot);
+  });
+}
+
+function initCapAttributionSuppression() {
+  if (capAttributionSuppressionInitialized || typeof document === 'undefined') return;
+  capAttributionSuppressionInitialized = true;
+
+  hideCapAttributionEverywhere();
+
+  const observer = new MutationObserver(() => {
+    hideCapAttributionEverywhere();
+  });
+
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+}
 
 function resolveForumSetting(attribute) {
   const value = app.forum?.attribute(attribute);
@@ -60,6 +107,8 @@ function getCapWidgetAttributes() {
 }
 
 app.initializers.add('tu/cap-captcha', () => {
+  initCapAttributionSuppression();
+
   const captchaOptions = {
     loadWidgetScript: loadCapWidgetScript,
     getWidgetAttributes: getCapWidgetAttributes,

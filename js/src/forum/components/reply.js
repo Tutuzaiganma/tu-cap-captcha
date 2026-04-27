@@ -2,16 +2,39 @@ import app from 'flarum/forum/app';
 import { extend, override } from 'flarum/common/extend';
 import ReplyComposer from 'flarum/forum/components/ReplyComposer';
 
+const CAP_EDITOR_HOST_CLASS = 'CapCaptcha-editor-host';
+
 function setBodyInputDisabled(composer, disabled) {
   if (!composer?.element) return;
   const editor = composer.element.querySelector('.ComposerBody-editor');
   if (!editor) return;
+  const isDisabled = !!disabled;
   const textarea = editor.querySelector('textarea.FormControl, textarea');
-  if (textarea) textarea.disabled = !!disabled;
+  if (textarea) textarea.disabled = isDisabled;
+
+  const controlElements = editor.querySelectorAll(
+    '.TextEditor-controls button, .TextEditor-controls input, .TextEditor-controls select, .TextEditor-controls textarea'
+  );
+
+  controlElements.forEach((element) => {
+    element.disabled = isDisabled;
+    element.setAttribute('aria-disabled', isDisabled ? 'true' : 'false');
+    element.style.pointerEvents = isDisabled ? 'none' : '';
+    element.style.opacity = isDisabled ? '0.55' : '';
+  });
+}
+
+function syncEditorHostClass(composer) {
+  const editor = composer?.element?.querySelector('.ComposerBody-editor');
+  if (!editor) return;
+
+  const hasCaptcha = !!editor.querySelector('.CapCaptcha-container--discussion, .CapCaptcha-container--reply');
+  editor.classList.toggle(CAP_EDITOR_HOST_CLASS, hasCaptcha);
 }
 
 function removeCaptchaContainer(composer) {
   composer.element?.querySelector('.CapCaptcha-container--reply')?.remove();
+  syncEditorHostClass(composer);
 }
 
 function hasAnimationOrTransition(element) {
@@ -95,6 +118,7 @@ function setupReplyCaptcha(composer, options) {
     editor.prepend(container);
     playPopupAnimation(container);
   }
+  editor.classList.add(CAP_EDITOR_HOST_CLASS);
 
   let widget = container.querySelector('cap-widget');
   if (!widget) {
