@@ -1,6 +1,7 @@
 import app from 'flarum/forum/app';
 import { extend, override } from 'flarum/common/extend';
 import ReplyComposer from 'flarum/forum/components/ReplyComposer';
+import { ensureCaptchaLoadingCard, watchCaptchaWidgetReady } from './loading-card';
 
 const CAP_EDITOR_HOST_CLASS = 'CapCaptcha-editor-host';
 
@@ -119,6 +120,7 @@ function setupReplyCaptcha(composer, options) {
     playPopupAnimation(container);
   }
   editor.classList.add(CAP_EDITOR_HOST_CLASS);
+  ensureCaptchaLoadingCard(container);
 
   let widget = container.querySelector('cap-widget');
   if (!widget) {
@@ -129,6 +131,7 @@ function setupReplyCaptcha(composer, options) {
     });
     container.appendChild(widget);
   }
+  watchCaptchaWidgetReady(widget, container);
 
   if (widget.getAttribute('data-cap-listener-ready') === '1') return;
   widget.setAttribute('data-cap-listener-ready', '1');

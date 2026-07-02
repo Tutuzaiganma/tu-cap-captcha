@@ -1,6 +1,68 @@
 .CapCaptcha-container {
+  position: relative;
   display: flex;
   justify-content: center;
+}
+
+.CapCaptcha-container.has-loading-card:not(.is-widget-ready) cap-widget {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.CapCaptcha-container.has-loading-card.is-widget-ready cap-widget {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.CapCaptcha-loadingCard {
+  width: var(--cap-widget-width, 260px);
+  min-height: var(--cap-widget-height, 58px);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 14px;
+  background: var(--control-bg);
+  color: var(--text-color);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.CapCaptcha-container.is-widget-ready .CapCaptcha-loadingCard {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(-2px);
+  pointer-events: none;
+}
+
+.CapCaptcha-loadingCard-spinner {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  border: 2px solid var(--muted-color-light);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: capCaptchaLoadingSpin 0.8s linear infinite;
+}
+
+.CapCaptcha-loadingCard-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.CapCaptcha-loadingCard-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.CapCaptcha-loadingCard-hint {
+  color: var(--muted-color);
+  font-size: 12px;
+  line-height: 1.25;
 }
 
 .CapCaptcha-container--discussion,
@@ -23,6 +85,13 @@
 
 .CapCaptcha-container--discussion cap-widget,
 .CapCaptcha-container--reply cap-widget {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.CapCaptcha-container--discussion .CapCaptcha-loadingCard,
+.CapCaptcha-container--reply .CapCaptcha-loadingCard {
   position: absolute;
   top: 0;
   left: 0;
@@ -53,6 +122,12 @@
   }
 }
 
+@keyframes capCaptchaLoadingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .CapCaptcha-container--discussion,
   .CapCaptcha-container--reply {
@@ -61,6 +136,12 @@
 
   .CapCaptcha-container--discussion.is-entering,
   .CapCaptcha-container--reply.is-entering {
+    animation: none;
+  }
+
+  .CapCaptcha-loadingCard,
+  .CapCaptcha-loadingCard-spinner {
+    transition: none;
     animation: none;
   }
 }

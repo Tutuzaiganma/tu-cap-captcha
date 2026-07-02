@@ -1,6 +1,7 @@
 import app from 'flarum/forum/app';
 import { extend, override } from 'flarum/common/extend';
 import LogInModal from 'flarum/forum/components/LogInModal';
+import { captchaLoadingCard, watchCaptchaWidgetReady } from './loading-card';
 
 function getWidget(modal) {
   return modal.$('cap-widget')[0] || null;
@@ -20,7 +21,9 @@ function resetCaptcha(modal) {
 
 function setupSolveListener(modal) {
   const widget = getWidget(modal);
-  if (!widget || widget.getAttribute('data-cap-listener-ready') === '1') return;
+  if (!widget) return;
+  watchCaptchaWidgetReady(widget);
+  if (widget.getAttribute('data-cap-listener-ready') === '1') return;
   widget.setAttribute('data-cap-listener-ready', '1');
   widget.addEventListener('solve', (event) => {
     widget.setAttribute('data-cap-token', event?.detail?.token || '');
@@ -48,7 +51,10 @@ export default function injectLoginCaptcha(options = {}) {
     loadWidgetScript();
     items.add(
       'capCaptcha',
-      m('div.Form-group.CapCaptcha-container', [m('cap-widget', { ...getWidgetAttributes(), 'data-cap-api-endpoint': endpoint })]),
+      m('div.Form-group.CapCaptcha-container.has-loading-card', [
+        captchaLoadingCard(),
+        m('cap-widget', { ...getWidgetAttributes(), 'data-cap-api-endpoint': endpoint }),
+      ]),
       15
     );
   });

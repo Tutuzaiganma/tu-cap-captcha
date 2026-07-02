@@ -40,5 +40,7 @@ tu-cap-captcha:
       search: Search
   forum:
     captcha_required: Please complete captcha verification first.
+    loading_verification: Loading human verification...
+    loading_verification_hint: If the network is slow, please wait a moment.
   api:
     invalid_captcha: Captcha verification failed, please try again.
